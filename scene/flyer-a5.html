@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<style>
+  @page { size: 148mm 210mm; margin: 0; }
+  :root{
+    --violet:#6d3bf5; --blue:#2f7bff; --ink:#15111f; --soft:#5b5470;
+    --line:#e9e6f5; --card:#f6f4fe;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  html,body{width:148mm;height:210mm;}
+  body{font-family:"Liberation Sans","Helvetica Neue",Arial,sans-serif;color:var(--ink);background:#fff;position:relative;overflow:hidden;}
+
+  /* header band */
+  .head{position:relative;height:42mm;padding:9mm 11mm 0;color:#fff;overflow:hidden;
+    background:linear-gradient(120deg,var(--violet),var(--blue));}
+  .head .glow{position:absolute;width:70mm;height:70mm;border-radius:50%;right:-20mm;top:-26mm;
+    background:radial-gradient(circle,rgba(255,255,255,.28),transparent 60%);}
+  .brand{font-size:30pt;font-weight:800;letter-spacing:-.5pt;}
+  .brand .dot{opacity:.85;}
+  .kick{margin-top:1mm;font-size:9pt;letter-spacing:3.2pt;font-weight:700;opacity:.92;}
+  .head .wave{position:absolute;left:0;right:0;bottom:-1px;height:7mm;background:#fff;
+    clip-path:polygon(0 100%,100% 100%,100% 30%,0 70%);}
+
+  /* body */
+  .main{padding:7mm 11mm 0;}
+  .h1{font-size:21pt;font-weight:800;line-height:1.12;letter-spacing:-.4pt;}
+  .h1 .ac{color:var(--violet);}
+  .lead{margin-top:3mm;font-size:10.5pt;line-height:1.45;color:var(--soft);}
+
+  .secTitle{margin-top:6mm;font-size:9pt;font-weight:800;letter-spacing:2.4pt;text-transform:uppercase;color:var(--blue);}
+  ul.svc{margin-top:3mm;list-style:none;}
+  ul.svc li{display:flex;gap:3.5mm;align-items:flex-start;margin-bottom:3mm;font-size:10.5pt;line-height:1.3;}
+  ul.svc li .ck{flex:0 0 6mm;width:6mm;height:6mm;border-radius:2mm;margin-top:.2mm;
+    background:linear-gradient(135deg,var(--violet),var(--blue));color:#fff;font-size:9pt;font-weight:800;
+    display:flex;align-items:center;justify-content:center;}
+  ul.svc li b{font-weight:800;}
+  ul.svc li span small{display:block;color:var(--soft);font-size:8.6pt;font-weight:600;margin-top:.4mm;}
+
+  /* QR card */
+  .qrcard{position:absolute;left:11mm;right:11mm;bottom:15mm;display:flex;gap:6mm;align-items:center;
+    background:var(--card);border:1px solid var(--line);border-radius:5mm;padding:6mm;}
+  .qrbox{flex:0 0 36mm;width:36mm;height:36mm;background:#fff;border-radius:3mm;padding:3mm;border:1px solid var(--line);}
+  .qrbox svg{width:100%;height:100%;display:block;}
+  .qrtext .small{font-size:8.5pt;font-weight:800;letter-spacing:2pt;color:var(--blue);text-transform:uppercase;}
+  .qrtext .big{font-size:13.5pt;font-weight:800;line-height:1.18;margin-top:1.5mm;}
+  .qrtext .url{margin-top:2.5mm;font-size:12pt;font-weight:800;}
+  .qrtext .url .dot{color:var(--violet);}
+
+  /* footer */
+  .foot{position:absolute;left:0;right:0;bottom:0;height:11mm;background:var(--ink);color:#cfc9e6;
+    display:flex;align-items:center;justify-content:center;gap:6mm;font-size:9pt;font-weight:600;letter-spacing:.5pt;}
+  .foot b{color:#fff;font-weight:800;}
+</style>
+</head>
+<body>
+  <div class="head">
+    <div class="glow"></div>
+    <div class="brand">Valorit<span class="dot">.</span></div>
+    <div class="kick">WEBDESIGN &amp; ENTWICKLUNG</div>
+    <div class="wave"></div>
+  </div>
+
+  <div class="main">
+    <div class="h1">Moderne Websites,<br>die <span class="ac">Kunden gewinnen.</span></div>
+    <div class="lead">Individuelle Websites für Unternehmen &amp; Selbstständige — schnell,
+      modern und professionell. Von der ersten Idee bis zum fertigen Auftritt.</div>
+
+    <div class="secTitle">Das bietet Valorit</div>
+    <ul class="svc">
+      <li><span class="ck">✓</span><span><b>Individuelles Webdesign</b><small>Keine Vorlagen, keine Baukästen – einzigartig für Ihre Marke.</small></span></li>
+      <li><span class="ck">✓</span><span><b>Schnell &amp; performant</b><small>Moderne Technik für kurze Ladezeiten und Top-Eindruck.</small></span></li>
+      <li><span class="ck">✓</span><span><b>Für jedes Gerät optimiert</b><small>Perfekt auf Smartphone, Tablet und Desktop.</small></span></li>
+      <li><span class="ck">✓</span><span><b>Persönliche Betreuung</b><small>Ein Ansprechpartner – von der Idee bis zum Launch und danach.</small></span></li>
+    </ul>
+  </div>
+
+  <div class="qrcard">
+    <div class="qrbox">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" shape-rendering="crispEdges"><path stroke="#15111f" d="M0 0.5h7m1 0h1m1 0h1m1 0h3m3 0h7M0 1.5h1m5 0h1m1 0h2m1 0h3m4 0h1m5 0h1M0 2.5h1m1 0h3m1 0h1m1 0h2m2 0h4m2 0h1m1 0h3m1 0h1M0 3.5h1m1 0h3m1 0h1m2 0h1m2 0h1m1 0h1m1 0h1m1 0h1m1 0h3m1 0h1M0 4.5h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h3m1 0h1m1 0h1m1 0h3m1 0h1M0 5.5h1m5 0h1m2 0h1m1 0h4m1 0h1m1 0h1m5 0h1M0 6.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M9 7.5h1m4 0h3M0 8.5h1m2 0h6m3 0h3m1 0h2m2 0h1m1 0h3M2 9.5h1m1 0h2m1 0h3m4 0h3m2 0h5M1 10.5h1m2 0h1m1 0h2m1 0h1m2 0h1m1 0h2m1 0h2m2 0h1m2 0h1M2 11.5h2m3 0h2m5 0h1m3 0h2m1 0h4M1 12.5h1m4 0h4m3 0h3m2 0h1m5 0h1M0 13.5h4m3 0h3m2 0h1m2 0h2m3 0h1m2 0h1M0 14.5h2m2 0h1m1 0h5m3 0h2m1 0h1m2 0h5M0 15.5h1m3 0h2m2 0h1m3 0h3m1 0h1m1 0h2m1 0h2m1 0h1M0 16.5h1m1 0h2m1 0h8m3 0h5m1 0h2M8 17.5h1m2 0h1m4 0h1m3 0h1m1 0h2M0 18.5h7m1 0h2m2 0h3m1 0h1m1 0h1m1 0h1m3 0h1M0 19.5h1m5 0h1m1 0h1m2 0h1m1 0h1m1 0h2m3 0h1M0 20.5h1m1 0h3m1 0h1m1 0h2m1 0h1m1 0h1m1 0h6m3 0h1M0 21.5h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h2m3 0h2m4 0h2M0 22.5h1m1 0h3m1 0h1m4 0h1m1 0h1m1 0h1m1 0h1m2 0h5M0 23.5h1m5 0h1m2 0h5m1 0h1m3 0h2m1 0h3M0 24.5h7m1 0h1m1 0h4m2 0h1m4 0h1m2 0h1"/></svg>
+    </div>
+    <div class="qrtext">
+      <div class="small">Jetzt scannen</div>
+      <div class="big">Sichern Sie sich Ihr<br>unverbindliches Angebot.</div>
+      <div class="url">valorit<span class="dot">.de</span></div>
+    </div>
+  </div>
+
+  <div class="foot"><span><b>valorit.de</b></span><span>·</span><span>@valorit</span><span>·</span><span>Webdesign &amp; Entwicklung</span></div>
+</body>
+</html>

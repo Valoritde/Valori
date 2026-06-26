@@ -3,4 +3,5 @@ output/*.mp4
 output/*.webm
 output/*.wav
 output/*.png
+output/*.pdf
 *.log
