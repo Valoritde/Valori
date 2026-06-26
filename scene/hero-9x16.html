@@ -97,6 +97,19 @@
 
   /* particles */
   .pt { position:absolute; width:8px; height:8px; border-radius:50%; background:rgba(160,195,255,.8); box-shadow:0 0 14px rgba(120,170,255,.9); }
+
+  /* animated mouse cursor + click ripple (end scene) */
+  #cursor {
+    position:absolute; left:0; top:0; width:56px; height:56px; z-index:60;
+    opacity:0; will-change:transform; pointer-events:none;
+    transform-origin:9px 5px; filter:drop-shadow(0 8px 16px rgba(0,0,0,.55));
+  }
+  #ripple {
+    position:absolute; left:0; top:0; width:30px; height:30px; border-radius:50%;
+    border:4px solid var(--accent); z-index:59; opacity:0;
+    transform:translate(-50%,-50%) scale(0); will-change:transform,opacity;
+    box-shadow:0 0 24px rgba(47,123,255,.6);
+  }
 </style>
 </head>
 <body>
@@ -123,6 +136,12 @@
   <div class="handle" data-el="handle"></div>
 
   <div id="vignette"></div>
+
+  <div id="ripple"></div>
+  <svg id="cursor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M4 2 L4 20 L9 15 L12.2 21.4 L14.8 20.1 L11.6 13.9 L18 13.9 Z"
+          fill="#ffffff" stroke="#0a0f1e" stroke-width="1.1" stroke-linejoin="round"/>
+  </svg>
 </div>
 
 <script>
@@ -132,21 +151,21 @@
 const CONFIG = {
   accent:  "#2f7bff",     // Markenfarbe (primär)
   accent2: "#27d3c4",     // Akzent für Glow/Verlauf
-  kicker:  "IT, DIE FUNKTIONIERT",
+  kicker:  "WEBDESIGN & ENTWICKLUNG",
   brandLine1: "Valor",
   brandLine2: "IT.",           // der Punkt wird in Akzentfarbe gesetzt
-  tagline: "Ihr Partner für <b>moderne IT-Lösungen</b> — sicher, schnell, zuverlässig.",
+  tagline: "Schnelle, moderne und professionelle <b>Websites</b> für Unternehmen & Selbstständige.",
   points: [
-    { ic:"⚙", t:"IT-Betreuung & Support" },
-    { ic:"🔒", t:"IT-Sicherheit & Backup" },
-    { ic:"☁", t:"Cloud & Digitalisierung" },
+    { ic:"⚡", t:"Blitzschnell & performant" },
+    { ic:"✨", t:"Modernes, individuelles Design" },
+    { ic:"💼", t:"Für Unternehmen & Selbstständige" },
   ],
-  statement1: "Wir kümmern uns",
-  statementHl: "um Ihre IT.",
+  statement1: "Schnell. Modern.",
+  statementHl: "Professionell.",
   ctaUrl1: "valorit",
   ctaUrlDot: ".de",
-  ctaSub: "Jetzt unverbindlich anfragen",
-  ctaBtn: "Mehr erfahren →",
+  ctaSub: "Jetzt Website anfragen",
+  ctaBtn: "Projekt starten →",
   handle: "@valorit  ·  valorit.de",
   durationSec: 18,
 };
@@ -251,11 +270,33 @@ function seek(t){
   $('#cta').style.opacity=easeOut(cVis);
   set(el('ctaurl'),  easeOut(win(t,14.2,15.2)), 30*(1-easeOut(win(t,14.2,15.2))));
   set(el('ctasub'),  easeOut(win(t,14.6,15.6)), 24*(1-easeOut(win(t,14.6,15.6))));
-  const btnP=easeOut(win(t,15.0,16.0));
-  const pulse=1+0.03*Math.sin(Math.max(0,t-16)*4);
-  set(el('ctabtn'),  btnP, 20*(1-btnP), btnP*pulse);
-  el('handle').style.opacity=easeOut(win(t,15.4,16.4));
+  // button is fully in BEFORE the click at t=15.0, then dips (press), then idle-pulses
+  const btnIn=easeOut(win(t,14.55,15.0));
+  const dip=0.13*Math.exp(-Math.pow((t-15.03)/0.05,2));     // gaussian press dip
+  const idle=1+0.02*Math.sin(Math.max(0,t-15.4)*3);
+  set(el('ctabtn'), btnIn, 20*(1-btnIn), btnIn*(1-dip)*idle);
+  el('handle').style.opacity=easeOut(win(t,15.45,16.4));
   $('#cta').style.opacity=easeOut(cVis);
+
+  // ----- animated mouse cursor glides to the button and clicks it (t≈15.0) -----
+  const cur=document.getElementById('cursor');
+  const rip=document.getElementById('ripple');
+  const r=el('ctabtn').getBoundingClientRect();
+  const bx=r.left+r.width/2, by=r.top+r.height/2;
+  const startX=775, startY=1505;
+  if(t<14.4){ cur.style.opacity=0; rip.style.opacity=0; }
+  else {
+    const g=easeInOut(win(t,14.45,15.0));
+    const cx=startX+(bx-startX)*g, cy=startY+(by-startY)*g;
+    const press=1-0.22*Math.exp(-Math.pow((t-15.03)/0.05,2));
+    cur.style.opacity=easeOut(win(t,14.4,14.7))*(1-easeOut(win(t,16.7,17.3)));
+    cur.style.transform=`translate(${cx-9}px,${cy-5}px) scale(${0.98*press})`;
+    const rp=win(t,15.02,15.8);
+    if(t>=15.02){
+      rip.style.opacity=(1-rp)*0.9;
+      rip.style.transform=`translate(${bx}px,${by}px) translate(-50%,-50%) scale(${0.2+rp*3.4})`;
+    } else rip.style.opacity=0;
+  }
 }
 
 window.__seek = seek;

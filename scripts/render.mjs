@@ -8,6 +8,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import ffmpegPkg from '@ffmpeg-installer/ffmpeg';
+import { generateAudio } from './audio.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
@@ -57,20 +58,32 @@ function run(cmd, args) {
     if (i % 30 === 0) process.stdout.write(`  frame ${i}/${totalFrames}\r`);
   }
   await browser.close();
-  console.log(`\nFrames done in ${((Date.now() - t0) / 1000).toFixed(1)}s. Encoding...`);
+  console.log(`\nFrames done in ${((Date.now() - t0) / 1000).toFixed(1)}s.`);
 
-  // Encode H.264 yuv420p + silent AAC track (max platform compatibility), faststart for streaming.
+  // Generate the synced SFX soundtrack (skip with NO_AUDIO=1).
+  let audioPath = null;
+  if (process.env.NO_AUDIO !== '1') {
+    audioPath = path.join(framesDir, 'audio.wav');
+    await generateAudio(duration, audioPath);
+    console.log('Soundtrack generated.');
+  }
+  console.log('Encoding...');
+
+  // Encode H.264 yuv420p + AAC, faststart for streaming.
+  const audioIn = audioPath
+    ? ['-i', audioPath]
+    : ['-f', 'lavfi', '-i', 'anullsrc=channel_layout=stereo:sample_rate=44100'];
   await run(ffmpeg, [
     '-y',
     '-framerate', String(FPS),
     '-i', path.join(framesDir, 'f_%05d.png'),
-    '-f', 'lavfi', '-i', 'anullsrc=channel_layout=stereo:sample_rate=44100',
+    ...audioIn,
     '-shortest',
     '-c:v', 'libx264', '-preset', 'slow', '-crf', '18',
     '-pix_fmt', 'yuv420p',
     '-profile:v', 'high', '-level', '4.0',
     '-x264-params', 'keyint=60:min-keyint=30',
-    '-c:a', 'aac', '-b:a', '128k',
+    '-c:a', 'aac', '-b:a', '192k',
     '-movflags', '+faststart',
     outFile,
   ]);
