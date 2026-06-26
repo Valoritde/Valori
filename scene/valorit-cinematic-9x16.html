@@ -242,64 +242,62 @@ function renderCode(frac){
 }
 function escapeHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
+// Timeline synced to the 40.5s German voiceover (scene cuts at speech pauses
+// ~8.0s / 16.8s / 29.0s; text cues aligned to spoken phrase starts).
 function seek(t){
   // drifting bg orbs
   $('#ob1').style.transform=`translate(${Math.sin(t*0.3)*40}px,${Math.cos(t*0.25)*30}px)`;
   $('#ob2').style.transform=`translate(${Math.cos(t*0.28)*44}px,${Math.sin(t*0.32)*34}px)`;
 
-  const a1=scene($('#s1'),t,0,6.4, 1.12,1.02, 20);
-  const a2=scene($('#s2'),t,6.0,14.4, 1.10,1.0, 16);
-  const a3=scene($('#s3'),t,14.0,24.4, 1.08,1.0, 14);
-  const a4=scene($('#s4'),t,23.8,30.2, 1.14,1.02, 0);
+  const a1=scene($('#s1'),t,0,8.5,    1.12,1.02, 20);
+  const a2=scene($('#s2'),t,8.0,17.3, 1.10,1.0, 16);
+  const a3=scene($('#s3'),t,16.8,29.5,1.08,1.0, 14);
+  const a4=scene($('#s4'),t,29.0,41.2,1.12,1.02, 0);
 
-  // letterbox subtle breathing (cinematic)
-  const lb=96;
-  $('#letterTop').style.height=lb+'px'; $('#letterBot').style.height=lb+'px';
+  $('#letterTop').style.height='96px'; $('#letterBot').style.height='96px';
 
-  // ---- Scene 1 texts ----
+  // ---- Scene 1 (0–8): problem / outdated site ----
   if(a1){
-    setL($('#s1a'), seg(t,0.7,1.8, 3.0,3.8), 26*(1-easeOut(win(t,0.7,1.8))));
-    setL($('#s1b'), seg(t,3.6,4.6, 5.7,6.3), 26*(1-easeOut(win(t,3.6,4.6))));
+    setL($('#s1a'), seg(t,0.5,1.6, 4.2,4.9), 26*(1-easeOut(win(t,0.5,1.6))));
+    setL($('#s1b'), seg(t,5.2,6.2, 7.8,8.4), 26*(1-easeOut(win(t,5.2,6.2))));
   }
-  // ---- Scene 2 device entrances + texts ----
+  // ---- Scene 2 (8–17): modern websites ----
   if(a2){
-    const lp=easeOut(win(t,6.4,7.6)); $('#lap').style.transform=`translateX(${ -60*(1-lp)}px) scale(${0.96+0.04*lp})`; $('#lap').style.opacity=lp;
-    const pp=easeOut(win(t,7.1,8.3)); $('#ph').style.transform=`translateX(${ 70*(1-pp)}px) translateY(${20*(1-pp)}px)`; $('#ph').style.opacity=pp;
-    setL($('#s2a'), seg(t,6.8,7.9, 10.0,10.7), 26*(1-easeOut(win(t,6.8,7.9))));
-    setL($('#s2b'), seg(t,10.4,11.4, 13.7,14.3), 26*(1-easeOut(win(t,10.4,11.4))));
+    const lp=easeOut(win(t,8.3,9.6)); $('#lap').style.transform=`translateX(${ -60*(1-lp)}px) scale(${0.96+0.04*lp})`; $('#lap').style.opacity=lp;
+    const pp=easeOut(win(t,9.1,10.4)); $('#ph').style.transform=`translateX(${ 70*(1-pp)}px) translateY(${20*(1-pp)}px)`; $('#ph').style.opacity=pp;
+    setL($('#s2a'), seg(t,8.7,9.8, 11.9,12.5), 26*(1-easeOut(win(t,8.7,9.8))));
+    setL($('#s2b'), seg(t,12.5,13.5, 16.3,16.9), 26*(1-easeOut(win(t,12.5,13.5))));
   }
-  // ---- Scene 3 code typing + canvas cursor + texts ----
+  // ---- Scene 3 (17–29): individual development ----
   if(a3){
-    renderCode(easeInOut(win(t,14.6,21.5)));
-    const cvp=easeOut(win(t,15.2,16.2)); $('#cv').style.opacity=cvp; $('#cv').style.transform=`translateY(${24*(1-cvp)}px) scale(${0.94+0.06*cvp})`;
-    // design cursor moves between nodes
+    renderCode(easeInOut(win(t,17.4,27.0)));
+    const cvp=easeOut(win(t,18.0,19.0)); $('#cv').style.opacity=cvp; $('#cv').style.transform=`translateY(${24*(1-cvp)}px) scale(${0.94+0.06*cvp})`;
     const nodes=[[80,55],[210,55],[140,150],[95,275],[225,275]];
-    const seqT=win(t,16.0,23.0)*(nodes.length-1); const idx=Math.min(nodes.length-2,Math.floor(seqT)); const fr=easeInOut(seqT-idx);
+    const seqT=win(t,19.0,28.0)*(nodes.length-1); const idx=Math.min(nodes.length-2,Math.floor(seqT)); const fr=easeInOut(seqT-idx);
     const x=nodes[idx][0]+(nodes[idx+1][0]-nodes[idx][0])*fr;
     const y=nodes[idx][1]+(nodes[idx+1][1]-nodes[idx][1])*fr;
     $('#dcur').style.transform=`translate(${x}px,${y}px)`;
-    setL($('#s3a'), seg(t,14.7,15.7, 17.4,18.0), 24*(1-easeOut(win(t,14.7,15.7))));
-    setL($('#s3b'), seg(t,18.0,19.0, 20.6,21.1), 24*(1-easeOut(win(t,18.0,19.0))));
-    setL($('#s3c'), seg(t,21.1,22.1, 23.6,24.2), 24*(1-easeOut(win(t,21.1,22.1))));
+    setL($('#s3a'), seg(t,17.3,18.3, 21.2,21.9), 24*(1-easeOut(win(t,17.3,18.3))));
+    setL($('#s3b'), seg(t,22.0,23.0, 24.9,25.5), 24*(1-easeOut(win(t,22.0,23.0))));
+    setL($('#s3c'), seg(t,25.6,26.6, 28.6,29.3), 24*(1-easeOut(win(t,25.6,26.6))));
   }
-  // ---- Scene 4 logo reveal ----
+  // ---- Scene 4 (29–40.5): logo + CTA ----
   if(a4){
-    const lr=easeOut(win(t,24.1,25.4));
+    const lr=easeOut(win(t,29.4,30.8));
     const logo=$('#logo');
     logo.style.opacity=lr;
     logo.style.transform=`scale(${0.86+0.14*lr})`;
     logo.style.textShadow=`0 0 ${80*lr}px rgba(138,92,255,${0.85*lr})`;
-    $('#halo').style.opacity=0.2+0.8*easeOut(win(t,24.0,25.0))*(0.7+0.3*Math.sin(t*2));
-    const uw=easeInOut(win(t,24.8,25.8)); $('#uline').style.width=(uw*420)+'px'; $('#uline').style.opacity=uw;
-    setL($('#claim'), easeOut(win(t,25.4,26.4)), 18*(1-easeOut(win(t,25.4,26.4))));
-    const cb=easeOut(win(t,26.0,27.0)); const pulse=1+0.025*Math.sin(Math.max(0,t-27.2)*4);
+    $('#halo').style.opacity=0.2+0.8*easeOut(win(t,29.3,30.3))*(0.7+0.3*Math.sin(t*2));
+    const uw=easeInOut(win(t,30.2,31.2)); $('#uline').style.width=(uw*420)+'px'; $('#uline').style.opacity=uw;
+    setL($('#claim'), easeOut(win(t,31.2,32.4)), 18*(1-easeOut(win(t,31.2,32.4))));
+    const cb=easeOut(win(t,34.4,35.8)); const pulse=1+0.025*Math.sin(Math.max(0,t-36.2)*4);
     $('#s4cta').style.opacity=cb; $('#s4cta').style.transform=`translateX(-50%) scale(${(0.9+0.1*cb)*pulse})`;
-    // light streaks sweep
-    $('#st1').style.opacity=0.6*easeOut(win(t,24.2,25.2))*(1-win(t,28,30)); $('#st1').style.transform=`translateX(${ -200+ (t-24)*120 }px)`;
-    $('#st2').style.opacity=0.5*easeOut(win(t,24.6,25.6))*(1-win(t,28,30)); $('#st2').style.transform=`translateX(${ 120- (t-24)*100 }px)`;
+    $('#st1').style.opacity=0.6*easeOut(win(t,29.5,30.5))*(1-win(t,39,41)); $('#st1').style.transform=`translateX(${ -200+ (t-29.4)*120 }px)`;
+    $('#st2').style.opacity=0.5*easeOut(win(t,29.9,30.9))*(1-win(t,39,41)); $('#st2').style.transform=`translateX(${ 120- (t-29.4)*100 }px)`;
   }
 }
-window.__seek=seek; window.__duration=30; seek(0); window.__ready=true;
+window.__seek=seek; window.__duration=40.5; seek(0); window.__ready=true;
 </script>
 </body>
 </html>

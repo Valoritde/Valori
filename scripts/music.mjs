@@ -87,12 +87,13 @@ export function generateMusic(duration = 30, outPath) {
     C:  { pad: [C4, E4, G4], bass: 130.81, arp: [C4, E4, G4, C4 * 2, E4 * 2] },
     G:  { pad: [G3, B3, D4], bass: 98.0, arp: [G3, B3, D4, G3 * 2, B3 * 2] },
   };
-  // schedule: [start, end, chordName, padGain]
+  // schedule: [start, end, chordName, padGain] — cuts at ~8 / 16.8 / 29s
   const schedule = [
-    [0, 3, 'Am', 0.05], [3, 6, 'F', 0.06],                 // scene 1: sparse, moody
-    [6, 8, 'C', 0.075], [8, 10, 'G', 0.075], [10, 12, 'Am', 0.08], [12, 14, 'F', 0.08],   // scene 2
-    [14, 16, 'C', 0.085], [16, 18, 'G', 0.085], [18, 20, 'Am', 0.09], [20, 22, 'F', 0.09], [22, 24, 'G', 0.1], // scene 3 (build)
-    [24, 30, 'C', 0.12],                                   // scene 4: resolve home (C major)
+    [0, 4, 'Am', 0.05], [4, 8, 'F', 0.06],                                   // scene 1: sparse, moody
+    [8, 10.5, 'C', 0.075], [10.5, 13, 'G', 0.075], [13, 16.8, 'Am', 0.08],    // scene 2
+    [16.8, 19, 'C', 0.085], [19, 21.5, 'G', 0.085], [21.5, 24, 'Am', 0.09],
+    [24, 26.5, 'F', 0.095], [26.5, 29, 'G', 0.1],                             // scene 3 (build)
+    [29, 34, 'C', 0.12], [34, 36, 'F', 0.11], [36, 38, 'G', 0.11], [38, 40.6, 'C', 0.12], // scene 4: IV–V–I home
   ];
 
   // ---- pad + bass ----
@@ -102,28 +103,28 @@ export function generateMusic(duration = 30, outPath) {
     subBass(a, dur, ch.bass, g * 1.6);
   }
 
-  // ---- arpeggio (6s → 22s), gain ramps up for the build ----
+  // ---- arpeggio (8s → 27s), gain ramps up for the build ----
   const stepT = 0.30;
   const chordAt = tt => { for (const s of schedule) if (tt >= s[0] && tt < s[1]) return chords[s[2]]; return chords.C; };
   let ai = 0;
-  for (let t = 6; t < 22; t += stepT, ai++) {
+  for (let t = 8; t < 27; t += stepT, ai++) {
     const ch = chordAt(t);
     const f = ch.arp[ai % ch.arp.length];
-    const ramp = Math.min(1, (t - 6) / 9);              // build over ~9s
+    const ramp = Math.min(1, (t - 8) / 11);             // build over ~11s
     const g = 0.05 * ramp;
     pluck(t, f, g, 5.5, ((ai % 3) - 1) * 0.35);
   }
 
-  // ---- bells in the finale (24 → 30): gentle ascending C major sparkle ----
-  const bellNotes = [C4 * 2, E4 * 2, G4 * 2, C4 * 4, G4 * 2, E4 * 2];
-  for (let i = 0; i < bellNotes.length; i++) pluck(24.0 + i * 0.5, bellNotes[i], 0.06 * (1 - i * 0.08), 3.2, ((i % 2) ? 1 : -1) * 0.3);
+  // ---- bells in the finale (29 → 37): gentle ascending C major sparkle ----
+  const bellNotes = [C4 * 2, E4 * 2, G4 * 2, C4 * 4, G4 * 2, E4 * 2, C4 * 4, G4 * 2];
+  for (let i = 0; i < bellNotes.length; i++) pluck(29.0 + i * 0.6, bellNotes[i], 0.06 * (1 - i * 0.06), 3.2, ((i % 2) ? 1 : -1) * 0.3);
 
   // ---- transitions + finale fx ----
-  whoosh(5.7, 0.7, 0.10);   // → scene 2
-  whoosh(13.7, 0.7, 0.10);  // → scene 3
-  riser(22.2, 1.9, 0.10);   // build into logo
-  whoosh(23.7, 0.6, 0.12);  // → scene 4
-  impact(24.05, 0.5);       // logo landing
+  whoosh(7.7, 0.7, 0.10);   // → scene 2
+  whoosh(16.5, 0.7, 0.10);  // → scene 3
+  riser(27.1, 1.9, 0.10);   // build into logo
+  whoosh(28.7, 0.6, 0.12);  // → scene 4
+  impact(29.05, 0.5);       // logo landing
 
   // ---- master: gentle global swell + fade out, soft-clip, normalize ----
   for (let i = 0; i < N; i++) {
