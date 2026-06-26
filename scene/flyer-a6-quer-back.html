@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<style>
+  @page { size: 148mm 105mm; margin: 0; }
+  :root{ --violet:#6d3bf5; --blue:#2f7bff; }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  html,body{width:148mm;height:105mm;}
+  body{font-family:"Liberation Sans","Helvetica Neue",Arial,sans-serif;color:#fff;
+    background:linear-gradient(140deg,var(--violet),var(--blue));position:relative;overflow:hidden;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;}
+  .glow{position:absolute;border-radius:50%;filter:blur(8mm);}
+  .g1{width:80mm;height:80mm;background:rgba(255,255,255,.16);right:-26mm;top:-30mm;}
+  .g2{width:70mm;height:70mm;background:rgba(20,0,60,.18);left:-24mm;bottom:-30mm;}
+  .kick{font-size:7pt;font-weight:800;letter-spacing:4pt;opacity:.9;position:relative;}
+  .brand{margin-top:3mm;font-size:34pt;font-weight:800;letter-spacing:-1pt;position:relative;}
+  .uline{margin:4mm auto 0;width:26mm;height:1.2mm;border-radius:1mm;background:rgba(255,255,255,.85);position:relative;}
+  .claim{margin-top:5mm;font-size:12pt;font-weight:600;line-height:1.35;opacity:.96;position:relative;max-width:110mm;}
+  .foot{position:absolute;bottom:8mm;left:0;right:0;font-size:10pt;font-weight:800;letter-spacing:.6pt;opacity:.95;}
+  .foot .sep{opacity:.6;margin:0 3mm;}
+</style>
+</head>
+<body>
+  <div class="glow g1"></div>
+  <div class="glow g2"></div>
+
+  <div class="kick">WEBDESIGN &amp; ENTWICKLUNG</div>
+  <div class="brand">Valorit.</div>
+  <div class="uline"></div>
+  <div class="claim">Websites, die Aufmerksamkeit gewinnen.</div>
+
+  <div class="foot">valorit.de <span class="sep">·</span> @valorit</div>
+</body>
+</html>
