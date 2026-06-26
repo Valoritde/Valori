@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<style>
+  @page { size: 148mm 105mm; margin: 0; }
+  :root{ --violet:#6d3bf5; --blue:#2f7bff; --ink:#15111f; --soft:#5b5470; --line:#e9e6f5; }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  html,body{width:148mm;height:105mm;}
+  body{font-family:"Liberation Sans","Helvetica Neue",Arial,sans-serif;color:var(--ink);background:#fff;display:flex;overflow:hidden;}
+
+  /* left content */
+  .left{flex:1;padding:8mm 7mm 6mm 9mm;display:flex;flex-direction:column;}
+  .brand{font-size:19pt;font-weight:800;letter-spacing:-.4pt;
+    background:linear-gradient(120deg,var(--violet),var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .kick{margin-top:.6mm;font-size:6.5pt;letter-spacing:2.6pt;font-weight:700;color:var(--blue);}
+  .h1{margin-top:4.5mm;font-size:15.5pt;font-weight:800;line-height:1.12;letter-spacing:-.3pt;}
+  .h1 .ac{color:var(--violet);}
+  .lead{margin-top:2mm;font-size:8.2pt;line-height:1.4;color:var(--soft);max-width:78mm;}
+  ul.svc{margin-top:auto;list-style:none;}
+  ul.svc li{display:flex;gap:2.6mm;align-items:center;margin-bottom:1.8mm;font-size:8.6pt;font-weight:700;}
+  ul.svc li .ck{flex:0 0 4.6mm;width:4.6mm;height:4.6mm;border-radius:1.4mm;
+    background:linear-gradient(135deg,var(--violet),var(--blue));color:#fff;font-size:7pt;font-weight:800;
+    display:flex;align-items:center;justify-content:center;}
+  .foot{margin-top:3.5mm;font-size:7.2pt;font-weight:600;color:var(--soft);letter-spacing:.4pt;}
+  .foot b{color:var(--ink);}
+
+  /* right QR panel */
+  .right{flex:0 0 54mm;position:relative;color:#fff;padding:8mm 7mm;overflow:hidden;
+    background:linear-gradient(150deg,var(--violet),var(--blue));
+    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;}
+  .right .glow{position:absolute;width:60mm;height:60mm;border-radius:50%;right:-26mm;top:-24mm;
+    background:radial-gradient(circle,rgba(255,255,255,.25),transparent 60%);}
+  .scan{font-size:6.6pt;font-weight:800;letter-spacing:2.4pt;opacity:.92;position:relative;}
+  .qrbox{margin-top:2.5mm;width:33mm;height:33mm;background:#fff;border-radius:2.6mm;padding:2.4mm;position:relative;}
+  .qrbox svg{width:100%;height:100%;display:block;}
+  .ctaTxt{margin-top:3mm;font-size:9.4pt;font-weight:800;line-height:1.2;position:relative;}
+  .url{margin-top:1.6mm;font-size:11.5pt;font-weight:800;position:relative;}
+  .url .dot{opacity:.8;}
+</style>
+</head>
+<body>
+  <div class="left">
+    <div>
+      <div class="brand">Valorit.</div>
+      <div class="kick">WEBDESIGN &amp; ENTWICKLUNG</div>
+      <div class="h1">Moderne Websites,<br>die <span class="ac">Kunden gewinnen.</span></div>
+      <div class="lead">Individuelle Websites für Unternehmen &amp; Selbstständige — schnell, modern und professionell.</div>
+    </div>
+    <ul class="svc">
+      <li><span class="ck">✓</span>Individuelles Webdesign – keine Vorlagen</li>
+      <li><span class="ck">✓</span>Schnell, performant &amp; mobil optimiert</li>
+      <li><span class="ck">✓</span>Persönliche Betreuung bis zum Launch</li>
+    </ul>
+    <div class="foot"><b>valorit.de</b> &nbsp;·&nbsp; @valorit</div>
+  </div>
+
+  <div class="right">
+    <div class="glow"></div>
+    <div class="scan">JETZT SCANNEN</div>
+    <div class="qrbox">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" shape-rendering="crispEdges"><path stroke="#15111f" d="M0 0.5h7m1 0h1m1 0h1m1 0h3m3 0h7M0 1.5h1m5 0h1m1 0h2m1 0h3m4 0h1m5 0h1M0 2.5h1m1 0h3m1 0h1m1 0h2m2 0h4m2 0h1m1 0h3m1 0h1M0 3.5h1m1 0h3m1 0h1m2 0h1m2 0h1m1 0h1m1 0h1m1 0h1m1 0h3m1 0h1M0 4.5h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h3m1 0h1m1 0h1m1 0h3m1 0h1M0 5.5h1m5 0h1m2 0h1m1 0h4m1 0h1m1 0h1m5 0h1M0 6.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M9 7.5h1m4 0h3M0 8.5h1m2 0h6m3 0h3m1 0h2m2 0h1m1 0h3M2 9.5h1m1 0h2m1 0h3m4 0h3m2 0h5M1 10.5h1m2 0h1m1 0h2m1 0h1m2 0h1m1 0h2m1 0h2m2 0h1m2 0h1M2 11.5h2m3 0h2m5 0h1m3 0h2m1 0h4M1 12.5h1m4 0h4m3 0h3m2 0h1m5 0h1M0 13.5h4m3 0h3m2 0h1m2 0h2m3 0h1m2 0h1M0 14.5h2m2 0h1m1 0h5m3 0h2m1 0h1m2 0h5M0 15.5h1m3 0h2m2 0h1m3 0h3m1 0h1m1 0h2m1 0h2m1 0h1M0 16.5h1m1 0h2m1 0h8m3 0h5m1 0h2M8 17.5h1m2 0h1m4 0h1m3 0h1m1 0h2M0 18.5h7m1 0h2m2 0h3m1 0h1m1 0h1m1 0h1m3 0h1M0 19.5h1m5 0h1m1 0h1m2 0h1m1 0h1m1 0h2m3 0h1M0 20.5h1m1 0h3m1 0h1m1 0h2m1 0h1m1 0h1m1 0h6m3 0h1M0 21.5h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h2m3 0h2m4 0h2M0 22.5h1m1 0h3m1 0h1m4 0h1m1 0h1m1 0h1m1 0h1m2 0h5M0 23.5h1m5 0h1m2 0h5m1 0h1m3 0h2m1 0h3M0 24.5h7m1 0h1m1 0h4m2 0h1m4 0h1m2 0h1"/></svg>
+    </div>
+    <div class="ctaTxt">Ihr unverbindliches<br>Angebot sichern.</div>
+    <div class="url">valorit<span class="dot">.de</span></div>
+  </div>
+</body>
+</html>
