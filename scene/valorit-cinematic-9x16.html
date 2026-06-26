@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<style>
+  :root{
+    --bg0:#0b0716; --bg1:#050309;
+    --violet:#8a5cff; --blue:#3f7bff; --magenta:#c061ff;
+    --ink:#ffffff; --muted:#a99fd0;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{width:1080px;height:1920px;overflow:hidden;background:#000;}
+  #stage{position:relative;width:1080px;height:1920px;overflow:hidden;
+    font-family:"Liberation Sans","Helvetica Neue",Arial,sans-serif;color:var(--ink);
+    background:radial-gradient(1200px 1400px at 50% 30%, #120a26, #05030a 70%);}
+
+  .scene{position:absolute;inset:0;opacity:0;will-change:opacity,transform;}
+  .cam{position:absolute;inset:0;will-change:transform;transform-origin:50% 50%;}
+
+  /* shared atmosphere */
+  .orb{position:absolute;border-radius:50%;filter:blur(70px);mix-blend-mode:screen;will-change:transform,opacity;}
+  #vignette{position:absolute;inset:0;box-shadow:inset 0 0 460px 130px rgba(0,0,0,.72);pointer-events:none;z-index:40;}
+  #letterTop,#letterBot{position:absolute;left:0;right:0;height:96px;background:#000;z-index:39;}
+  #letterTop{top:0;} #letterBot{bottom:0;}
+
+  .line{position:absolute;left:90px;right:90px;will-change:opacity,transform;}
+  .t-kick{font-size:28px;letter-spacing:.4em;text-transform:uppercase;color:var(--muted);font-weight:700;}
+  .t-big{font-size:78px;font-weight:800;line-height:1.08;letter-spacing:-1.5px;}
+  .t-mid{font-size:60px;font-weight:700;line-height:1.16;letter-spacing:-1px;}
+  .accent{color:var(--violet);}
+  .accent2{color:var(--blue);}
+
+  /* ---------- Scene 1: outdated website ---------- */
+  #s1 .screen{position:absolute;left:140px;top:430px;width:800px;height:560px;border-radius:14px;
+    background:#cfcabc;box-shadow:0 50px 120px rgba(0,0,0,.7), 0 0 0 14px #15171c, 0 0 0 16px #2a2d36;
+    overflow:hidden;filter:saturate(.7) brightness(.82);}
+  #s1 .oldnav{height:64px;background:#7a1f1f;color:#e9d8a6;font-family:"Liberation Serif",Georgia,serif;
+    display:flex;align-items:center;gap:24px;padding:0 20px;font-size:22px;}
+  #s1 .oldnav b{color:#ffe08a;font-size:26px;}
+  #s1 .oldbody{padding:22px 24px;color:#33312b;font-family:"Liberation Serif",Georgia,serif;}
+  #s1 .oldbody h1{font-size:30px;color:#7a1f1f;}
+  #s1 .oldbody p{font-size:18px;line-height:1.5;margin-top:10px;color:#4a463d;}
+  #s1 .oldbtn{margin-top:16px;display:inline-block;background:#2f6f2f;color:#fff;border:2px outset #6fae6f;padding:8px 16px;font-size:18px;}
+  #s1 .oldimg{margin-top:16px;width:100%;height:130px;background:
+     repeating-linear-gradient(45deg,#b9b2a0 0 18px,#a9a290 18px 36px);border:3px ridge #888;}
+  #s1 .stand{position:absolute;left:50%;top:1010px;transform:translateX(-50%);width:120px;height:60px;
+    background:linear-gradient(#23262e,#15171c);border-radius:0 0 16px 16px;}
+  #s1 .redglow{position:absolute;left:50%;top:520px;transform:translate(-50%,0);width:900px;height:700px;
+    background:radial-gradient(circle,rgba(150,30,40,.18),transparent 65%);filter:blur(20px);}
+
+  /* ---------- Scene 2: modern websites ---------- */
+  .device{position:absolute;border-radius:26px;overflow:hidden;
+    box-shadow:0 50px 130px rgba(60,20,140,.45), 0 0 0 1px rgba(160,140,255,.25);background:#0d0a1c;}
+  #s2 .laptop{left:120px;top:470px;width:840px;height:540px;}
+  #s2 .topbar{height:46px;background:#120e26;display:flex;align-items:center;gap:10px;padding:0 18px;border-bottom:1px solid rgba(150,130,255,.18);}
+  #s2 .topbar i{width:12px;height:12px;border-radius:50%;display:block;}
+  .c1{background:#ff5f57;}.c2{background:#febc2e;}.c3{background:#28c840;}
+  #s2 .url{margin-left:16px;height:24px;flex:1;border-radius:7px;background:#1d1740;}
+  #s2 .mhero{padding:34px 40px;background:
+      radial-gradient(420px 300px at 80% 0%, rgba(138,92,255,.35), transparent 60%),
+      linear-gradient(160deg,#0e0a20,#0a0717);}
+  #s2 .chip{display:inline-block;font-size:17px;font-weight:700;letter-spacing:.14em;color:#cbb8ff;
+    background:rgba(138,92,255,.16);border:1px solid rgba(138,92,255,.4);padding:7px 16px;border-radius:20px;}
+  #s2 .h1{height:30px;width:70%;border-radius:8px;margin-top:20px;background:linear-gradient(90deg,#fff,#c3b6ff);}
+  #s2 .h1.s{width:48%;margin-top:12px;}
+  #s2 .ln{height:12px;border-radius:6px;background:rgba(180,165,255,.25);margin-top:16px;}
+  #s2 .ln.a{width:84%;}.ln.b{width:66%;}
+  #s2 .cta{margin-top:22px;width:200px;height:50px;border-radius:26px;background:linear-gradient(90deg,var(--violet),var(--blue));box-shadow:0 12px 30px rgba(99,80,255,.5);}
+  #s2 .phone{right:96px;top:760px;width:300px;height:600px;border-radius:46px;box-shadow:0 50px 120px rgba(60,20,140,.5),0 0 0 10px #16122b,0 0 0 12px #2a2350;}
+  #s2 .pscreen{position:absolute;inset:12px;border-radius:34px;overflow:hidden;background:linear-gradient(160deg,#100b22,#0a0717);}
+  #s2 .pbar{height:60px;background:rgba(138,92,255,.14);}
+  #s2 .pimg{margin:18px;height:200px;border-radius:18px;background:
+     radial-gradient(140px 140px at 70% 30%,rgba(63,123,255,.6),transparent 60%),linear-gradient(150deg,#1a1140,#0d0a22);}
+  #s2 .pln{margin:14px 18px;height:14px;border-radius:7px;background:rgba(180,165,255,.25);}
+  #s2 .pln.s{width:60%;}
+  #s2 .pcta{margin:22px 18px;height:48px;border-radius:24px;background:linear-gradient(90deg,var(--violet),var(--blue));}
+
+  /* ---------- Scene 3: designer / code ---------- */
+  #s3 .editor{position:absolute;left:110px;top:430px;width:680px;height:640px;border-radius:16px;
+    background:#0c0a1a;box-shadow:0 50px 120px rgba(50,20,120,.5),0 0 0 1px rgba(150,130,255,.2);overflow:hidden;}
+  #s3 .ebar{height:48px;background:#130f28;display:flex;align-items:center;gap:9px;padding:0 18px;}
+  #s3 .ebar i{width:12px;height:12px;border-radius:50%;}
+  #s3 .ebar span{margin-left:14px;color:#8f86bf;font-size:18px;font-family:"DejaVu Sans Mono",monospace;}
+  #s3 pre{padding:24px 26px;font-family:"DejaVu Sans Mono",monospace;font-size:24px;line-height:1.5;color:#d7cfff;white-space:pre-wrap;}
+  #s3 .kw{color:#c061ff;} #s3 .fn{color:#3f9bff;} #s3 .st{color:#5ce0b0;} #s3 .cm{color:#5b5680;}
+  #s3 .caret{display:inline-block;width:3px;height:26px;background:#cbb8ff;transform:translateY(5px);}
+  #s3 .canvas{position:absolute;right:80px;top:760px;width:300px;height:360px;border-radius:18px;
+    background:linear-gradient(160deg,#140e2e,#0b0820);box-shadow:0 40px 100px rgba(60,20,140,.45),0 0 0 1px rgba(150,130,255,.2);overflow:hidden;}
+  #s3 .cnode{position:absolute;border-radius:10px;background:linear-gradient(150deg,rgba(138,92,255,.5),rgba(63,123,255,.3));border:1px solid rgba(170,150,255,.5);}
+  #s3 .designcursor{position:absolute;width:30px;height:30px;z-index:5;}
+
+  /* ---------- Scene 4: logo ---------- */
+  #s4{background:radial-gradient(1100px 1300px at 50% 42%, #1a0f3a, #05030c 72%);}
+  #s4 .streak{position:absolute;height:3px;border-radius:3px;filter:blur(2px);opacity:.0;
+    background:linear-gradient(90deg,transparent,var(--violet),transparent);}
+  #s4 .logo{position:absolute;left:0;right:0;top:780px;text-align:center;font-size:140px;font-weight:800;letter-spacing:-3px;
+    background:linear-gradient(90deg,#fff 20%,#cbb8ff 50%,#9fc0ff 80%);-webkit-background-clip:text;background-clip:text;color:transparent;
+    text-shadow:0 0 80px rgba(138,92,255,.0);}
+  #s4 .uline{position:absolute;left:50%;top:950px;height:8px;border-radius:5px;transform:translateX(-50%);
+    background:linear-gradient(90deg,var(--violet),var(--blue));box-shadow:0 0 34px rgba(138,92,255,.9);}
+  #s4 .claim{position:absolute;left:90px;right:90px;top:1010px;text-align:center;font-size:46px;font-weight:600;color:#e7e1ff;letter-spacing:-.5px;}
+  #s4 .cta{position:absolute;left:50%;top:1180px;transform:translateX(-50%);padding:30px 64px;border-radius:60px;font-size:44px;font-weight:800;color:#0a0420;
+    background:linear-gradient(90deg,var(--violet),var(--blue));box-shadow:0 20px 70px rgba(99,80,255,.6);white-space:nowrap;}
+  #s4 .halo{position:absolute;left:50%;top:840px;transform:translate(-50%,-50%);width:900px;height:900px;
+    background:radial-gradient(circle,rgba(138,92,255,.30),transparent 60%);filter:blur(30px);}
+</style>
+</head>
+<body>
+<div id="stage">
+  <!-- background drifting orbs (persist) -->
+  <div id="bgOrbs">
+    <div class="orb" id="ob1" style="width:620px;height:620px;left:-160px;top:120px;background:radial-gradient(circle,var(--violet),transparent 70%);opacity:.4;"></div>
+    <div class="orb" id="ob2" style="width:560px;height:560px;right:-160px;top:980px;background:radial-gradient(circle,var(--blue),transparent 70%);opacity:.34;"></div>
+  </div>
+
+  <!-- Scene 1 -->
+  <div class="scene" id="s1"><div class="cam">
+    <div class="redglow"></div>
+    <div class="screen">
+      <div class="oldnav"><b>Mustermann GmbH</b><span>Start</span><span>Über uns</span><span>Kontakt</span></div>
+      <div class="oldbody">
+        <h1>Herzlich Willkommen!</h1>
+        <p>Wir sind ein Familienunternehmen seit 1998. Auf dieser Homepage finden Sie alle Informationen rund um unsere Produkte und Dienstleistungen.</p>
+        <span class="oldbtn">Hier klicken!!!</span>
+        <div class="oldimg"></div>
+      </div>
+    </div>
+    <div class="stand"></div>
+    <div class="line t-mid" id="s1a" style="top:1180px;">Ihre Website ist oft der<br>erste Eindruck.</div>
+    <div class="line t-big" id="s1b" style="top:1180px;">Verliert sie <span class="accent">Aufmerksamkeit?</span></div>
+  </div></div>
+
+  <!-- Scene 2 -->
+  <div class="scene" id="s2"><div class="cam">
+    <div class="device laptop" id="lap">
+      <div class="topbar"><i class="c1"></i><i class="c2"></i><i class="c3"></i><div class="url"></div></div>
+      <div class="mhero">
+        <span class="chip">IHRE MARKE</span>
+        <div class="h1"></div><div class="h1 s"></div>
+        <div class="ln a"></div><div class="ln b"></div>
+        <div class="cta"></div>
+      </div>
+    </div>
+    <div class="device phone" id="ph"><div class="pscreen">
+      <div class="pbar"></div><div class="pimg"></div>
+      <div class="pln"></div><div class="pln s"></div><div class="pcta"></div>
+    </div></div>
+    <div class="line t-mid" id="s2a" style="top:1330px;">Moderne Websites<br>schaffen <span class="accent">Vertrauen.</span></div>
+    <div class="line t-mid" id="s2b" style="top:1330px;">Und verwandeln Besucher<br>in <span class="accent2">Kunden.</span></div>
+  </div></div>
+
+  <!-- Scene 3 -->
+  <div class="scene" id="s3"><div class="cam">
+    <div class="editor">
+      <div class="ebar"><i class="c1"></i><i class="c2"></i><i class="c3"></i><span>index.tsx</span></div>
+      <pre id="code"></pre>
+    </div>
+    <div class="canvas" id="cv">
+      <div class="cnode" style="left:24px;top:24px;width:120px;height:60px;"></div>
+      <div class="cnode" style="left:160px;top:24px;width:110px;height:60px;"></div>
+      <div class="cnode" style="left:24px;top:104px;width:246px;height:90px;"></div>
+      <div class="cnode" style="left:24px;top:214px;width:150px;height:120px;"></div>
+      <div class="cnode" style="left:190px;top:214px;width:80px;height:120px;"></div>
+      <svg class="designcursor" id="dcur" viewBox="0 0 24 24"><path d="M4 2 L4 20 L9 15 L12.2 21.4 L14.8 20.1 L11.6 13.9 L18 13.9 Z" fill="#fff" stroke="#1a0f3a" stroke-width="1.1" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="line t-big" id="s3a" style="top:1240px;">Individuell entwickelt.</div>
+    <div class="line t-mid" id="s3b" style="top:1240px;">Keine Vorlagen.<br>Keine Kompromisse.</div>
+    <div class="line t-mid" id="s3c" style="top:1240px;">Genau passend für<br>Ihr Unternehmen.</div>
+  </div></div>
+
+  <!-- Scene 4 -->
+  <div class="scene" id="s4"><div class="cam">
+    <div class="halo" id="halo"></div>
+    <div class="streak" id="st1" style="top:700px;left:-200px;width:700px;"></div>
+    <div class="streak" id="st2" style="top:1020px;left:480px;width:760px;background:linear-gradient(90deg,transparent,var(--blue),transparent);"></div>
+    <div class="logo" id="logo">Valorit</div>
+    <div class="uline" id="uline"></div>
+    <div class="claim" id="claim">Websites, die Aufmerksamkeit gewinnen.</div>
+    <div class="cta" id="s4cta">Jetzt auf valorit.de</div>
+  </div></div>
+
+  <div id="letterTop"></div><div id="letterBot"></div>
+  <div id="vignette"></div>
+</div>
+
+<script>
+const root=document.documentElement;
+const $=s=>document.querySelector(s);
+const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
+const easeOut=t=>1-Math.pow(1-clamp(t),3);
+const easeInOut=t=>{t=clamp(t);return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;};
+const win=(t,a,b)=>clamp((t-a)/(b-a));
+const seg=(t,inA,inB,outA,outB)=>clamp(easeOut(win(t,inA,inB))-(outA!=null?easeOut(win(t,outA,outB)):0));
+const setL=(node,o,ty=0,sc=1)=>{node.style.opacity=o;node.style.transform=`translateY(${ty}px) scale(${sc})`;};
+
+// scene cross-dissolve + camera push-in
+function scene(node,t,a,b, camFrom=1.08, camTo=1.0, drift=0){
+  const o=seg(t,a,a+0.7, b-0.7,b+0.0001);
+  node.style.opacity=o;
+  const p=easeInOut(win(t,a,b));
+  const sc=camFrom+(camTo-camFrom)*p;
+  node.querySelector('.cam').style.transform=`scale(${sc}) translateY(${drift*(1-p)}px)`;
+  return o>0.001;
+}
+
+// scene 3 code text (revealed by character count)
+const codeHTML=[
+  '<span class="cm">// Ihre Website. Maßgeschneidert.</span>',
+  '',
+  '<span class="kw">export default function</span> <span class="fn">Brand</span>() {',
+  '  <span class="kw">return</span> (',
+  '    &lt;<span class="fn">Hero</span> ',
+  '      title=<span class="st">"Ihre Marke"</span>',
+  '      style=<span class="st">"modern"</span> /&gt;',
+  '  )',
+  '}',
+];
+const codePlain=[
+  '// Ihre Website. Maßgeschneidert.',
+  '',
+  'export default function Brand() {',
+  '  return (',
+  '    <Hero ',
+  '      title="Ihre Marke"',
+  '      style="modern" />',
+  '  )',
+  '}',
+];
+const codeEl=$('#code');
+const totalChars=codePlain.join('\n').length;
+
+function renderCode(frac){
+  const target=Math.floor(frac*totalChars);
+  // build up to target chars across plain lines, but render with spans per full line once reached
+  let count=0,out='';
+  for(let i=0;i<codePlain.length;i++){
+    const ln=codePlain[i];
+    if(count+ln.length<=target){ out+=codeHTML[i]+'\n'; count+=ln.length+1; }
+    else { const partial=Math.max(0,target-count); out+=escapeHtml(ln.slice(0,partial))+'<span class="caret"></span>'; count=target; break; }
+  }
+  codeEl.innerHTML=out;
+}
+function escapeHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function seek(t){
+  // drifting bg orbs
+  $('#ob1').style.transform=`translate(${Math.sin(t*0.3)*40}px,${Math.cos(t*0.25)*30}px)`;
+  $('#ob2').style.transform=`translate(${Math.cos(t*0.28)*44}px,${Math.sin(t*0.32)*34}px)`;
+
+  const a1=scene($('#s1'),t,0,6.4, 1.12,1.02, 20);
+  const a2=scene($('#s2'),t,6.0,14.4, 1.10,1.0, 16);
+  const a3=scene($('#s3'),t,14.0,24.4, 1.08,1.0, 14);
+  const a4=scene($('#s4'),t,23.8,30.2, 1.14,1.02, 0);
+
+  // letterbox subtle breathing (cinematic)
+  const lb=96;
+  $('#letterTop').style.height=lb+'px'; $('#letterBot').style.height=lb+'px';
+
+  // ---- Scene 1 texts ----
+  if(a1){
+    setL($('#s1a'), seg(t,0.7,1.8, 3.0,3.8), 26*(1-easeOut(win(t,0.7,1.8))));
+    setL($('#s1b'), seg(t,3.6,4.6, 5.7,6.3), 26*(1-easeOut(win(t,3.6,4.6))));
+  }
+  // ---- Scene 2 device entrances + texts ----
+  if(a2){
+    const lp=easeOut(win(t,6.4,7.6)); $('#lap').style.transform=`translateX(${ -60*(1-lp)}px) scale(${0.96+0.04*lp})`; $('#lap').style.opacity=lp;
+    const pp=easeOut(win(t,7.1,8.3)); $('#ph').style.transform=`translateX(${ 70*(1-pp)}px) translateY(${20*(1-pp)}px)`; $('#ph').style.opacity=pp;
+    setL($('#s2a'), seg(t,6.8,7.9, 10.0,10.7), 26*(1-easeOut(win(t,6.8,7.9))));
+    setL($('#s2b'), seg(t,10.4,11.4, 13.7,14.3), 26*(1-easeOut(win(t,10.4,11.4))));
+  }
+  // ---- Scene 3 code typing + canvas cursor + texts ----
+  if(a3){
+    renderCode(easeInOut(win(t,14.6,21.5)));
+    const cvp=easeOut(win(t,15.2,16.2)); $('#cv').style.opacity=cvp; $('#cv').style.transform=`translateY(${24*(1-cvp)}px) scale(${0.94+0.06*cvp})`;
+    // design cursor moves between nodes
+    const nodes=[[80,55],[210,55],[140,150],[95,275],[225,275]];
+    const seqT=win(t,16.0,23.0)*(nodes.length-1); const idx=Math.min(nodes.length-2,Math.floor(seqT)); const fr=easeInOut(seqT-idx);
+    const x=nodes[idx][0]+(nodes[idx+1][0]-nodes[idx][0])*fr;
+    const y=nodes[idx][1]+(nodes[idx+1][1]-nodes[idx][1])*fr;
+    $('#dcur').style.transform=`translate(${x}px,${y}px)`;
+    setL($('#s3a'), seg(t,14.7,15.7, 17.4,18.0), 24*(1-easeOut(win(t,14.7,15.7))));
+    setL($('#s3b'), seg(t,18.0,19.0, 20.6,21.1), 24*(1-easeOut(win(t,18.0,19.0))));
+    setL($('#s3c'), seg(t,21.1,22.1, 23.6,24.2), 24*(1-easeOut(win(t,21.1,22.1))));
+  }
+  // ---- Scene 4 logo reveal ----
+  if(a4){
+    const lr=easeOut(win(t,24.1,25.4));
+    const logo=$('#logo');
+    logo.style.opacity=lr;
+    logo.style.transform=`scale(${0.86+0.14*lr})`;
+    logo.style.textShadow=`0 0 ${80*lr}px rgba(138,92,255,${0.85*lr})`;
+    $('#halo').style.opacity=0.2+0.8*easeOut(win(t,24.0,25.0))*(0.7+0.3*Math.sin(t*2));
+    const uw=easeInOut(win(t,24.8,25.8)); $('#uline').style.width=(uw*420)+'px'; $('#uline').style.opacity=uw;
+    setL($('#claim'), easeOut(win(t,25.4,26.4)), 18*(1-easeOut(win(t,25.4,26.4))));
+    const cb=easeOut(win(t,26.0,27.0)); const pulse=1+0.025*Math.sin(Math.max(0,t-27.2)*4);
+    $('#s4cta').style.opacity=cb; $('#s4cta').style.transform=`translateX(-50%) scale(${(0.9+0.1*cb)*pulse})`;
+    // light streaks sweep
+    $('#st1').style.opacity=0.6*easeOut(win(t,24.2,25.2))*(1-win(t,28,30)); $('#st1').style.transform=`translateX(${ -200+ (t-24)*120 }px)`;
+    $('#st2').style.opacity=0.5*easeOut(win(t,24.6,25.6))*(1-win(t,28,30)); $('#st2').style.transform=`translateX(${ 120- (t-24)*100 }px)`;
+  }
+}
+window.__seek=seek; window.__duration=30; seek(0); window.__ready=true;
+</script>
+</body>
+</html>
