@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<style>
+  /* ====== Fonts available in the render env: Liberation Sans (Arial-like) ====== */
+  :root {
+    --bg0:#0a0f1e; --bg1:#05070f;
+    --accent:#2f7bff;     /* primary brand accent (overridden by CONFIG) */
+    --accent2:#27d3c4;    /* secondary accent for glow */
+    --ink:#ffffff;
+    --muted:#9fb0cc;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { width:1080px; height:1920px; overflow:hidden; background:var(--bg1); }
+  #stage {
+    position:relative; width:1080px; height:1920px;
+    font-family:"Liberation Sans","Helvetica Neue",Arial,sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(1200px 1200px at 50% 18%, rgba(47,123,255,.18), transparent 60%),
+      radial-gradient(900px 900px at 80% 95%, rgba(39,211,196,.12), transparent 60%),
+      linear-gradient(160deg, var(--bg0), var(--bg1));
+    overflow:hidden;
+  }
+  /* animated grid */
+  #grid {
+    position:absolute; inset:-10%;
+    background-image:
+      linear-gradient(rgba(120,150,200,.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(120,150,200,.07) 1px, transparent 1px);
+    background-size:90px 90px;
+    mask-image:radial-gradient(1000px 1400px at 50% 40%, #000 30%, transparent 78%);
+    -webkit-mask-image:radial-gradient(1000px 1400px at 50% 40%, #000 30%, transparent 78%);
+  }
+  .orb {
+    position:absolute; border-radius:50%;
+    filter:blur(60px); opacity:.55; mix-blend-mode:screen;
+  }
+  #orbA { width:680px; height:680px; left:-120px; top:120px; background:radial-gradient(circle,var(--accent),transparent 70%); }
+  #orbB { width:620px; height:620px; right:-160px; top:760px; background:radial-gradient(circle,var(--accent2),transparent 70%); }
+  #vignette { position:absolute; inset:0; box-shadow:inset 0 0 420px 120px rgba(0,0,0,.65); pointer-events:none; }
+
+  /* content */
+  #content { position:absolute; inset:0; display:flex; flex-direction:column; }
+  .kicker {
+    position:absolute; left:90px; top:300px;
+    font-size:30px; letter-spacing:.42em; text-transform:uppercase;
+    color:var(--muted); font-weight:700;
+  }
+  .brand {
+    position:absolute; left:88px; top:350px;
+    font-size:150px; font-weight:800; letter-spacing:-3px; line-height:.95;
+  }
+  .brand .dot { color:var(--accent); }
+  .underline {
+    position:absolute; left:92px; top:540px; height:10px; border-radius:6px;
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    box-shadow:0 0 30px rgba(47,123,255,.8);
+  }
+  .tagline {
+    position:absolute; left:90px; right:90px; top:640px;
+    font-size:52px; font-weight:600; line-height:1.25; color:#e8eefc;
+  }
+  .tagline b { color:var(--accent); font-weight:800; }
+
+  .points { position:absolute; left:90px; right:90px; top:900px; }
+  .point {
+    display:flex; align-items:center; gap:34px; margin-bottom:46px;
+    font-size:50px; font-weight:600; color:#dbe6fb;
+  }
+  .point .ic {
+    width:78px; height:78px; flex:0 0 78px; border-radius:20px;
+    background:linear-gradient(150deg, rgba(47,123,255,.30), rgba(39,211,196,.18));
+    border:1.5px solid rgba(120,170,255,.45);
+    display:flex; align-items:center; justify-content:center;
+    font-size:42px; color:#fff;
+  }
+
+  .statement {
+    position:absolute; left:90px; right:90px; top:980px;
+    font-size:104px; font-weight:800; line-height:1.04; letter-spacing:-2px;
+  }
+  .statement .hl { color:var(--accent); }
+
+  /* CTA scene */
+  #cta { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .cta-url { font-size:96px; font-weight:800; letter-spacing:-2px; }
+  .cta-url .dot { color:var(--accent); }
+  .cta-sub { margin-top:26px; font-size:44px; font-weight:600; color:var(--muted); letter-spacing:.04em; }
+  .cta-btn {
+    margin-top:80px; padding:34px 70px; border-radius:60px; font-size:46px; font-weight:800;
+    color:#04122e; background:linear-gradient(90deg,var(--accent),var(--accent2));
+    box-shadow:0 18px 60px rgba(47,123,255,.55);
+  }
+  .handle { position:absolute; bottom:120px; left:0; right:0; text-align:center; font-size:40px; color:var(--muted); font-weight:600; letter-spacing:.06em; }
+
+  /* particles */
+  .pt { position:absolute; width:8px; height:8px; border-radius:50%; background:rgba(160,195,255,.8); box-shadow:0 0 14px rgba(120,170,255,.9); }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="grid"></div>
+  <div id="orbA" class="orb"></div>
+  <div id="orbB" class="orb"></div>
+  <div id="particles"></div>
+
+  <div id="content">
+    <div class="kicker" data-el="kicker"></div>
+    <div class="brand" data-el="brand"></div>
+    <div class="underline" data-el="underline"></div>
+    <div class="tagline" data-el="tagline"></div>
+    <div class="points" data-el="points"></div>
+    <div class="statement" data-el="statement"></div>
+  </div>
+
+  <div id="cta">
+    <div class="cta-url" data-el="ctaurl"></div>
+    <div class="cta-sub" data-el="ctasub"></div>
+    <div class="cta-btn" data-el="ctabtn"></div>
+  </div>
+  <div class="handle" data-el="handle"></div>
+
+  <div id="vignette"></div>
+</div>
+
+<script>
+/* ============================================================
+   CONFIG — hier Texte & Farben anpassen
+   ============================================================ */
+const CONFIG = {
+  accent:  "#2f7bff",     // Markenfarbe (primär)
+  accent2: "#27d3c4",     // Akzent für Glow/Verlauf
+  kicker:  "IT, DIE FUNKTIONIERT",
+  brandLine1: "Valor",
+  brandLine2: "IT.",           // der Punkt wird in Akzentfarbe gesetzt
+  tagline: "Ihr Partner für <b>moderne IT-Lösungen</b> — sicher, schnell, zuverlässig.",
+  points: [
+    { ic:"⚙", t:"IT-Betreuung & Support" },
+    { ic:"🔒", t:"IT-Sicherheit & Backup" },
+    { ic:"☁", t:"Cloud & Digitalisierung" },
+  ],
+  statement1: "Wir kümmern uns",
+  statementHl: "um Ihre IT.",
+  ctaUrl1: "valorit",
+  ctaUrlDot: ".de",
+  ctaSub: "Jetzt unverbindlich anfragen",
+  ctaBtn: "Mehr erfahren →",
+  handle: "@valorit  ·  valorit.de",
+  durationSec: 18,
+};
+
+/* ============================================================
+   Engine — deterministic, driven by window.__seek(tSeconds)
+   ============================================================ */
+const root = document.documentElement;
+root.style.setProperty('--accent', CONFIG.accent);
+root.style.setProperty('--accent2', CONFIG.accent2);
+
+const $ = (sel)=>document.querySelector(sel);
+const el = (name)=>document.querySelector(`[data-el="${name}"]`);
+
+// fill static text
+el('kicker').textContent = CONFIG.kicker;
+el('brand').innerHTML = `${CONFIG.brandLine1}<span class="dot">${CONFIG.brandLine2}</span>`;
+el('tagline').innerHTML = CONFIG.tagline;
+el('points').innerHTML = CONFIG.points.map(p=>`<div class="point"><div class="ic">${p.ic}</div><div>${p.t}</div></div>`).join('');
+el('statement').innerHTML = `${CONFIG.statement1} <span class="hl">${CONFIG.statementHl}</span>`;
+el('ctaurl').innerHTML = `${CONFIG.ctaUrl1}<span class="dot">${CONFIG.ctaUrlDot}</span>`;
+el('ctasub').textContent = CONFIG.ctaSub;
+el('ctabtn').textContent = CONFIG.ctaBtn;
+el('handle').textContent = CONFIG.handle;
+
+// particles
+const NPART = 26;
+const parts = [];
+const pc = $('#particles');
+let seedv = 1337;
+const rnd = ()=>{ seedv = (seedv*1103515245+12345) & 0x7fffffff; return seedv/0x7fffffff; };
+for(let i=0;i<NPART;i++){
+  const d=document.createElement('div'); d.className='pt';
+  const x=rnd()*1080, y=rnd()*1920, sp=0.15+rnd()*0.5, ph=rnd()*Math.PI*2, sc=0.4+rnd()*1.4;
+  d.style.transform=`translate(${x}px,${y}px) scale(${sc})`;
+  pc.appendChild(d); parts.push({d,x,y,sp,ph,sc});
+}
+
+// easing
+const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
+const easeOut=t=>1-Math.pow(1-clamp(t),3);
+const easeInOut=t=>{t=clamp(t);return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;};
+// progress in [a,b] window
+const win=(t,a,b)=>clamp((t-a)/(b-a));
+// appear then disappear
+const seg=(t,inA,inB,outA,outB)=>{
+  const up=easeOut(win(t,inA,inB));
+  const down=outA!=null?easeOut(win(t,outA,outB)):0;
+  return clamp(up-down);
+};
+const set=(node,o,ty=0,sc=1,blur=0)=>{
+  node.style.opacity=o;
+  node.style.transform=`translateY(${ty}px) scale(${sc})`;
+  node.style.filter=blur?`blur(${blur}px)`:'';
+};
+
+function seek(t){
+  // ----- background motion -----
+  const gridShift=(t*8)%90;
+  $('#grid').style.transform=`translate(${-gridShift}px,${-gridShift*0.6}px)`;
+  $('#orbA').style.transform=`translate(${Math.sin(t*0.5)*40}px,${Math.cos(t*0.4)*30}px)`;
+  $('#orbB').style.transform=`translate(${Math.cos(t*0.45)*46}px,${Math.sin(t*0.5)*36}px)`;
+  parts.forEach(p=>{
+    const ny=(p.y - t*p.sp*40)%1980; const yy=ny<-30?ny+1980:ny;
+    const tw=0.4+0.6*(0.5+0.5*Math.sin(t*1.6+p.ph));
+    p.d.style.transform=`translate(${p.x+Math.sin(t*0.6+p.ph)*18}px,${yy}px) scale(${p.sc})`;
+    p.d.style.opacity=tw*0.8;
+  });
+
+  // Scene windows (seconds):
+  // S1 brand     : 0.3 - 8   (out 8-9)
+  // S2 tagline   : 1.4 ...
+  // S3 points    : 3.2 ...
+  // S4 statement : 9 - 13.5  (out 13.5-14.5)
+  // S5 cta       : 14 - end
+
+  // S1
+  set(el('kicker'),   seg(t,0.3,1.3, 8,9),  18*(1-easeOut(win(t,0.3,1.3))));
+  const bP=seg(t,0.5,1.6, 8,9);
+  set(el('brand'),    bP, 36*(1-easeOut(win(t,0.5,1.6))), 0.96+0.04*easeOut(win(t,0.5,1.6)));
+  const uP=seg(t,1.1,2.0, 8,9);
+  el('underline').style.opacity=uP;
+  el('underline').style.width=(easeInOut(win(t,1.1,2.2))*470)+'px';
+  set(el('tagline'),  seg(t,1.6,2.8, 8,9), 30*(1-easeOut(win(t,1.6,2.8))));
+
+  // S3 points stagger
+  const pts=document.querySelectorAll('.point');
+  pts.forEach((node,i)=>{
+    const a=3.2+i*0.55;
+    const o=seg(t,a,a+1.0, 8,9);
+    set(node,o, 40*(1-easeOut(win(t,a,a+1.0))));
+  });
+
+  // S4 statement
+  const sP=seg(t,9.2,10.4, 13.4,14.4);
+  set(el('statement'), sP, 40*(1-easeOut(win(t,9.2,10.4))));
+  // hide content block during cta
+  $('#content').style.opacity = 1 - easeOut(win(t,14.0,14.8));
+
+  // S5 CTA
+  const cVis=win(t,14.2,15.2);
+  $('#cta').style.opacity=easeOut(cVis);
+  set(el('ctaurl'),  easeOut(win(t,14.2,15.2)), 30*(1-easeOut(win(t,14.2,15.2))));
+  set(el('ctasub'),  easeOut(win(t,14.6,15.6)), 24*(1-easeOut(win(t,14.6,15.6))));
+  const btnP=easeOut(win(t,15.0,16.0));
+  const pulse=1+0.03*Math.sin(Math.max(0,t-16)*4);
+  set(el('ctabtn'),  btnP, 20*(1-btnP), btnP*pulse);
+  el('handle').style.opacity=easeOut(win(t,15.4,16.4));
+  $('#cta').style.opacity=easeOut(cVis);
+}
+
+window.__seek = seek;
+window.__duration = CONFIG.durationSec;
+seek(0);
+window.__ready = true;
+</script>
+</body>
+</html>

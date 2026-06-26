@@ -1,0 +1,14 @@
+{
+  "name": "valori-instagram-videos",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Generator für Instagram-Videos (Reels 9:16) für valorit.de — animierte HTML/CSS-Szenen, gerendert mit Playwright und encodiert mit ffmpeg (H.264 MP4).",
+  "scripts": {
+    "render": "node scripts/render.mjs"
+  },
+  "dependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
+    "playwright": "^1.49.0"
+  }
+}
