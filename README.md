@@ -45,3 +45,23 @@ Nach Änderungen einfach erneut `npm run render` ausführen.
 
 Für Feed (1:1 / 4:5) oder Stories die Szene kopieren und `WIDTH`/`HEIGHT` setzen,
 z. B. `WIDTH=1080 HEIGHT=1080` (Layout der Szene ggf. anpassen).
+
+## Bewerbung (EDEKA) — A4-PDF
+
+Druckfertige Bewerbungsmappe (3 Seiten: **Deckblatt · Anschreiben · Lebenslauf**)
+als A4-PDF. Vorlage: [`scene/bewerbung-edeka.html`](scene/bewerbung-edeka.html).
+
+```bash
+npm run bewerbung
+# Ergebnis:
+#   output/edeka-bewerbung.pdf           (3 Seiten, A4, Vektortext)
+#   output/edeka-bewerbung-1-deckblatt.png … -3-lebenslauf.png  (Vorschau)
+```
+
+**Ausfüllen:** Alle persönlichen Angaben stehen als rot markierte `[Platzhalter]`
+direkt im HTML (z. B. `[Vorname Nachname]`, `[Straße Hausnr.]`, `[zu besetzende
+Stelle]`). Platzhalter im HTML ersetzen und erneut `npm run bewerbung` ausführen —
+die farbige Markierung verschwindet automatisch, sobald der Text kein Platzhalter
+mehr ist (einfach das `<span class="ph">…</span>` entfernen bzw. den Text darin
+überschreiben). Das Bewerbungsfoto lässt sich als Bild in die dafür vorgesehenen
+Rahmen einsetzen.

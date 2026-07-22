@@ -5,7 +5,8 @@
   "type": "module",
   "description": "Generator für Instagram-Videos (Reels 9:16) für valorit.de — animierte HTML/CSS-Szenen, gerendert mit Playwright und encodiert mit ffmpeg (H.264 MP4).",
   "scripts": {
-    "render": "node scripts/render.mjs"
+    "render": "node scripts/render.mjs",
+    "bewerbung": "node scripts/bewerbung.mjs"
   },
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.1.0",

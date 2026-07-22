@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Bewerbung EDEKA</title>
+<style>
+  /* ---------------------------------------------------------------
+     Druckfertige Bewerbungsmappe (A4) für eine Bewerbung bei EDEKA.
+     3 Seiten: Deckblatt · Anschreiben (DIN 5008) · Lebenslauf.
+     Alle persönlichen Angaben stehen als [Platzhalter] im Text und
+     können direkt in dieser Datei ersetzt werden. Danach neu rendern:
+        node scripts/bewerbung.mjs
+     --------------------------------------------------------------- */
+
+  :root{
+    --ink:#1a1a1a;          /* Fließtext */
+    --muted:#5b6470;        /* Sekundärtext */
+    --line:#d9dee5;         /* Trennlinien */
+    --accent:#1e3a5f;       /* dezentes, seriöses Navy */
+    --accent-soft:#eef2f7;  /* Flächen */
+    --ph:#c8412a;           /* Platzhalter-Markierung (auffällig) */
+    --ph-bg:#fdecea;
+  }
+
+  *{ box-sizing:border-box; }
+
+  @page{ size:A4; margin:0; }
+
+  html,body{ margin:0; padding:0; }
+
+  body{
+    font-family:"Liberation Sans","Helvetica Neue",Arial,"DejaVu Sans",sans-serif;
+    color:var(--ink);
+    font-size:11pt;
+    line-height:1.5;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+    background:#fff;
+  }
+
+  /* Ein Blatt = eine A4-Seite */
+  .sheet{
+    position:relative;
+    width:210mm;
+    height:297mm;
+    padding:22mm 20mm 18mm 25mm;   /* DIN-nahe Ränder: links etwas breiter */
+    overflow:hidden;
+    page-break-after:always;
+    break-after:page;
+    background:#fff;
+  }
+  .sheet:last-child{ page-break-after:auto; break-after:auto; }
+
+  /* Platzhalter, die ersetzt werden müssen */
+  .ph{
+    color:var(--ph);
+    background:var(--ph-bg);
+    padding:0 2px;
+    border-radius:2px;
+    font-weight:600;
+  }
+
+  h1,h2,h3{ margin:0; font-weight:700; letter-spacing:.2px; }
+
+  /* =================== SEITE 1 · DECKBLATT =================== */
+  .cover{ padding:0; }
+  .cover .bar{
+    height:70mm;
+    background:linear-gradient(135deg,var(--accent),#2c527d);
+    color:#fff;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding:0 25mm;
+  }
+  .cover .bar .eyebrow{
+    text-transform:uppercase;
+    letter-spacing:4px;
+    font-size:11pt;
+    opacity:.85;
+    margin-bottom:6mm;
+  }
+  .cover .bar h1{ font-size:34pt; line-height:1.05; }
+  .cover .bar .role{ margin-top:5mm; font-size:15pt; font-weight:400; opacity:.95; }
+
+  .cover .body{ padding:16mm 25mm; display:flex; gap:16mm; }
+  .cover .photo{
+    width:45mm; height:58mm; flex:0 0 45mm;
+    border:1.5px dashed var(--line);
+    border-radius:3px;
+    display:flex; align-items:center; justify-content:center;
+    text-align:center; color:var(--muted); font-size:9pt; padding:6mm;
+    background:var(--accent-soft);
+  }
+  .cover .who{ flex:1; }
+  .cover .who h2{ font-size:20pt; color:var(--accent); margin-bottom:2mm; }
+  .cover .who .sub{ color:var(--muted); font-size:12pt; margin-bottom:8mm; }
+  .contact-list{ list-style:none; margin:0; padding:0; }
+  .contact-list li{ padding:2.5mm 0; border-bottom:1px solid var(--line); display:flex; }
+  .contact-list li span:first-child{
+    width:34mm; color:var(--muted); font-size:9.5pt; text-transform:uppercase; letter-spacing:.5px;
+  }
+  .cover .foot{
+    position:absolute; left:25mm; right:25mm; bottom:16mm;
+    color:var(--muted); font-size:9.5pt; border-top:1px solid var(--line); padding-top:4mm;
+  }
+
+  /* =================== SEITE 2 · ANSCHREIBEN =================== */
+  .sender-top{
+    text-align:right; font-size:9.5pt; color:var(--muted); line-height:1.45;
+    border-bottom:1px solid var(--line); padding-bottom:4mm; margin-bottom:10mm;
+  }
+  .sender-top strong{ color:var(--ink); font-size:11pt; }
+
+  .addr-row{ display:flex; justify-content:space-between; align-items:flex-start; gap:20mm; }
+  .recipient{ line-height:1.5; }
+  .recipient .label{ font-size:8.5pt; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; margin-bottom:2mm; }
+  .place-date{ text-align:right; white-space:nowrap; padding-top:14mm; }
+
+  .subject{ margin:14mm 0 7mm; font-weight:700; font-size:11.5pt; }
+
+  .letter p{ margin:0 0 4.5mm; text-align:left; }
+  .subject .ref{ font-weight:400; color:var(--muted); }
+  .letter .greeting{ margin-bottom:6mm; }
+  .sign{ margin-top:9mm; }
+  .sign .name{ margin-top:14mm; font-weight:600; }
+  .enclosure{ margin-top:8mm; color:var(--muted); font-size:9.5pt; }
+
+  /* =================== SEITE 3 · LEBENSLAUF =================== */
+  .cv-head{
+    display:flex; justify-content:space-between; align-items:flex-start;
+    border-bottom:2px solid var(--accent); padding-bottom:6mm; margin-bottom:9mm;
+  }
+  .cv-head h1{ font-size:26pt; color:var(--accent); }
+  .cv-head .tagline{ color:var(--muted); margin-top:1mm; font-size:11pt; }
+  .cv-head .photo-sm{
+    width:32mm; height:42mm; border:1.5px dashed var(--line); border-radius:3px;
+    display:flex; align-items:center; justify-content:center; text-align:center;
+    color:var(--muted); font-size:8pt; padding:3mm; background:var(--accent-soft);
+  }
+
+  .cv-section{ display:grid; grid-template-columns:44mm 1fr; gap:6mm 8mm; margin-bottom:7mm; }
+  .cv-section > h3{
+    color:var(--accent); font-size:11pt; text-transform:uppercase; letter-spacing:1px;
+    padding-top:1mm;
+  }
+  .cv-block{ margin:0; }
+  .entry{ margin-bottom:4mm; }
+  .entry:last-child{ margin-bottom:0; }
+  .entry .when{ color:var(--muted); font-size:9.5pt; }
+  .entry .what{ font-weight:600; }
+  .entry .where{ color:var(--muted); }
+  .entry ul{ margin:1.5mm 0 0; padding-left:5mm; }
+  .entry ul li{ margin-bottom:1mm; }
+  .kv{ margin:0; }
+  .kv div{ display:flex; padding:1mm 0; }
+  .kv div span:first-child{ width:38mm; color:var(--muted); }
+  .cv-foot{
+    position:absolute; left:25mm; right:20mm; bottom:16mm;
+    display:flex; justify-content:space-between; color:var(--muted);
+    font-size:9.5pt; border-top:1px solid var(--line); padding-top:4mm;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================ SEITE 1 · DECKBLATT ============================ -->
+<section class="sheet cover">
+  <div class="bar">
+    <div class="eyebrow">Bewerbung</div>
+    <h1><span class="ph">[Vorname Nachname]</span></h1>
+    <div class="role">als <span class="ph">[zu besetzende Stelle, z.&nbsp;B. Verkäufer/in]</span> bei EDEKA <span class="ph">[Markt / Filiale]</span></div>
+  </div>
+
+  <div class="body">
+    <div class="photo">Bewerbungsfoto<br>(45&nbsp;×&nbsp;58&nbsp;mm)<br>hier einfügen</div>
+    <div class="who">
+      <h2><span class="ph">[Vorname Nachname]</span></h2>
+      <div class="sub"><span class="ph">[kurzer Titel, z.&nbsp;B. „Zuverlässig · kundenorientiert · teamfähig"]</span></div>
+      <ul class="contact-list">
+        <li><span>Anschrift</span><span><span class="ph">[Straße Hausnr.]</span>, <span class="ph">[PLZ Ort]</span></span></li>
+        <li><span>Telefon</span><span><span class="ph">[Telefonnummer]</span></span></li>
+        <li><span>E-Mail</span><span><span class="ph">[E-Mail-Adresse]</span></span></li>
+        <li><span>Geburtsdatum</span><span><span class="ph">[TT.MM.JJJJ]</span></span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="foot">
+    Anlagen: Anschreiben · Lebenslauf · <span class="ph">[Zeugnisse / Nachweise]</span>
+  </div>
+</section>
+
+<!-- ============================ SEITE 2 · ANSCHREIBEN ============================ -->
+<section class="sheet">
+  <div class="sender-top">
+    <strong><span class="ph">[Vorname Nachname]</span></strong><br>
+    <span class="ph">[Straße Hausnr.]</span> · <span class="ph">[PLZ Ort]</span><br>
+    Tel. <span class="ph">[Telefonnummer]</span> · <span class="ph">[E-Mail-Adresse]</span>
+  </div>
+
+  <div class="addr-row">
+    <div class="recipient">
+      <div class="label">Empfänger</div>
+      EDEKA <span class="ph">[Markt / Inhaber, z.&nbsp;B. „Max Mustermann e.K."]</span><br>
+      <span class="ph">[z.&nbsp;Hd. Frau/Herr Ansprechpartner:in]</span><br>
+      <span class="ph">[Straße Hausnr.]</span><br>
+      <span class="ph">[PLZ Ort]</span>
+    </div>
+    <div class="place-date"><span class="ph">[Ort]</span>, <span class="ph">[TT.MM.JJJJ]</span></div>
+  </div>
+
+  <div class="subject">Bewerbung als <span class="ph">[zu besetzende Stelle]</span> <span class="ref">– <span class="ph">[ggf. Kennziffer der Stellenanzeige]</span></span></div>
+
+  <div class="letter">
+    <p class="greeting">Sehr geehrte Damen und Herren, <span class="ph">[bei bekanntem Ansprechpartner: „Sehr geehrte Frau …," bzw. „Sehr geehrter Herr …,"]</span></p>
+
+    <p>mit großem Interesse habe ich Ihre Stellenausschreibung als <span class="ph">[Stelle]</span> gelesen. Ihr Markt steht für Frische, Regionalität und einen freundlichen Umgang mit den Kundinnen und Kunden – ein Umfeld, in dem ich mich mit meiner <span class="ph">[Eigenschaft, z.&nbsp;B. serviceorientierten und zupackenden]</span> Art gut einbringen kann. Deshalb bewerbe ich mich bei Ihnen.</p>
+
+    <p>Aktuell bin ich <span class="ph">[aktuelle Situation, z.&nbsp;B. „Schüler:in an der …-Schule" / „in der …-Branche tätig" / „auf der Suche nach einer neuen Herausforderung"]</span>. In <span class="ph">[bisherige Tätigkeit / Nebenjob / Praktikum]</span> habe ich bereits Erfahrung im <span class="ph">[Bereich, z.&nbsp;B. Kundenkontakt, an der Kasse, in der Warenverräumung]</span> gesammelt. Ich arbeite sorgfältig, packe im Team mit an und behalte auch bei viel Betrieb einen kühlen Kopf.</p>
+
+    <p>Zu meinen Stärken zählen <span class="ph">[Stärke 1]</span>, <span class="ph">[Stärke 2]</span> und <span class="ph">[Stärke 3]</span>. Freundlichkeit gegenüber den Kundinnen und Kunden, Pünktlichkeit und Verlässlichkeit sind für mich selbstverständlich. <span class="ph">[Optional: Schichtdienst / Wochenendarbeit ist für mich kein Problem.]</span></p>
+
+    <p>Über die Möglichkeit, mich persönlich vorzustellen, freue ich mich sehr. Ich kann ab dem <span class="ph">[frühestmöglicher Eintrittstermin]</span> bei Ihnen beginnen<span class="ph">[; meine Gehaltsvorstellung liegt bei … €]</span>.</p>
+
+    <div class="sign">
+      <div>Mit freundlichen Grüßen</div>
+      <div class="name"><span class="ph">[Vorname Nachname]</span></div>
+    </div>
+
+    <div class="enclosure">Anlagen: Lebenslauf, <span class="ph">[Zeugnisse / Nachweise / Zertifikate]</span></div>
+  </div>
+</section>
+
+<!-- ============================ SEITE 3 · LEBENSLAUF ============================ -->
+<section class="sheet">
+  <div class="cv-head">
+    <div>
+      <h1>Lebenslauf</h1>
+      <div class="tagline"><span class="ph">[Vorname Nachname]</span></div>
+    </div>
+    <div class="photo-sm">Foto<br>(optional)</div>
+  </div>
+
+  <div class="cv-section">
+    <h3>Persönliches</h3>
+    <div class="cv-block kv">
+      <div><span>Name</span><span class="ph">[Vorname Nachname]</span></div>
+      <div><span>Anschrift</span><span><span class="ph">[Straße Hausnr., PLZ Ort]</span></span></div>
+      <div><span>Telefon</span><span class="ph">[Telefonnummer]</span></div>
+      <div><span>E-Mail</span><span class="ph">[E-Mail-Adresse]</span></div>
+      <div><span>Geburtsdatum / -ort</span><span><span class="ph">[TT.MM.JJJJ]</span> in <span class="ph">[Ort]</span></span></div>
+      <div><span>Staatsangehörigkeit</span><span class="ph">[Staatsangehörigkeit]</span></div>
+    </div>
+  </div>
+
+  <div class="cv-section">
+    <h3>Berufserfahrung</h3>
+    <div class="cv-block">
+      <div class="entry">
+        <div class="when"><span class="ph">[MM/JJJJ – MM/JJJJ (oder „heute")]</span></div>
+        <div class="what"><span class="ph">[Position / Tätigkeit]</span></div>
+        <div class="where"><span class="ph">[Arbeitgeber, Ort]</span></div>
+        <ul>
+          <li><span class="ph">[Aufgabe / Erfolg 1]</span></li>
+          <li><span class="ph">[Aufgabe / Erfolg 2]</span></li>
+        </ul>
+      </div>
+      <div class="entry">
+        <div class="when"><span class="ph">[MM/JJJJ – MM/JJJJ]</span></div>
+        <div class="what"><span class="ph">[Position / Nebenjob / Praktikum]</span></div>
+        <div class="where"><span class="ph">[Arbeitgeber, Ort]</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cv-section">
+    <h3>Ausbildung / Schule</h3>
+    <div class="cv-block">
+      <div class="entry">
+        <div class="when"><span class="ph">[MM/JJJJ – MM/JJJJ]</span></div>
+        <div class="what"><span class="ph">[Abschluss / Schulform, z.&nbsp;B. „Mittlere Reife"]</span></div>
+        <div class="where"><span class="ph">[Schule / Einrichtung, Ort]</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cv-section">
+    <h3>Kenntnisse</h3>
+    <div class="cv-block kv">
+      <div><span>Sprachen</span><span><span class="ph">[z.&nbsp;B. Deutsch (Muttersprache), Englisch (Grundkenntnisse)]</span></span></div>
+      <div><span>EDV</span><span class="ph">[z.&nbsp;B. MS Office, Kassensysteme]</span></div>
+      <div><span>Führerschein</span><span class="ph">[z.&nbsp;B. Klasse B]</span></div>
+      <div><span>Sonstiges</span><span class="ph">[z.&nbsp;B. Hygieneschulung, Gabelstaplerschein]</span></div>
+    </div>
+  </div>
+
+  <div class="cv-section">
+    <h3>Interessen</h3>
+    <div class="cv-block"><span class="ph">[Hobbys / ehrenamtliches Engagement]</span></div>
+  </div>
+
+  <div class="cv-foot">
+    <span><span class="ph">[Ort]</span>, <span class="ph">[TT.MM.JJJJ]</span></span>
+    <span><span class="ph">[Unterschrift]</span></span>
+  </div>
+</section>
+
+</body>
+</html>
