@@ -41,7 +41,7 @@ const DPI = Number(process.env.DPI || 200);
   const names = ['1-deckblatt', '2-anschreiben', '3-lebenslauf'];
   const sheets = await imgPage.$$('.sheet');
   for (let i = 0; i < sheets.length; i++) {
-    const suffix = names[i] || String(i + 1);
+    const suffix = (await sheets[i].getAttribute('data-name')) || (sheets.length > 1 ? names[i] : null) || `seite-${i + 1}`;
     await sheets[i].screenshot({ path: `${base}-${suffix}.png` });
     console.log(`✅ ${base}-${suffix}.png`);
   }

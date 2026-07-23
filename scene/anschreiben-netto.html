@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Anschreiben NETTO – Minijob</title>
+<style>
+  /* ---------------------------------------------------------------
+     Einseitiges Anschreiben (A4, DIN 5008) für einen Minijob bei NETTO.
+     Persönliche Angaben stehen als [Platzhalter] im Text. Danach neu
+     rendern:  node scripts/bewerbung.mjs scene/anschreiben-netto.html output/netto-anschreiben
+     --------------------------------------------------------------- */
+  :root{
+    --ink:#1a1a1a; --muted:#5b6470; --line:#d9dee5; --accent:#1e3a5f;
+    --ph:#c8412a; --ph-bg:#fdecea;
+  }
+  *{ box-sizing:border-box; }
+  @page{ size:A4; margin:0; }
+  html,body{ margin:0; padding:0; }
+  body{
+    font-family:"Liberation Sans","Helvetica Neue",Arial,"DejaVu Sans",sans-serif;
+    color:var(--ink); font-size:11pt; line-height:1.5;
+    -webkit-print-color-adjust:exact; print-color-adjust:exact; background:#fff;
+  }
+  .sheet{
+    position:relative; width:210mm; height:297mm;
+    padding:22mm 20mm 18mm 25mm; overflow:hidden; background:#fff;
+  }
+  .ph{ color:var(--ph); background:var(--ph-bg); padding:0 2px; border-radius:2px; font-weight:600; }
+
+  .sender-top{
+    text-align:right; font-size:9.5pt; color:var(--muted); line-height:1.45;
+    border-bottom:1px solid var(--line); padding-bottom:4mm; margin-bottom:10mm;
+  }
+  .sender-top strong{ color:var(--ink); font-size:11pt; }
+  .addr-row{ display:flex; justify-content:space-between; align-items:flex-start; gap:20mm; }
+  .recipient{ line-height:1.5; }
+  .recipient .label{ font-size:8.5pt; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; margin-bottom:2mm; }
+  .place-date{ text-align:right; white-space:nowrap; padding-top:14mm; }
+  .subject{ margin:14mm 0 7mm; font-weight:700; font-size:11.5pt; }
+  .subject .ref{ font-weight:400; color:var(--muted); }
+  .letter p{ margin:0 0 4.5mm; text-align:left; }
+  .letter .greeting{ margin-bottom:6mm; }
+  .sign{ margin-top:9mm; }
+  .sign .name{ margin-top:14mm; font-weight:600; }
+  .enclosure{ margin-top:8mm; color:var(--muted); font-size:9.5pt; }
+</style>
+</head>
+<body>
+
+<section class="sheet" data-name="anschreiben">
+  <div class="sender-top">
+    <strong><span class="ph">[Vorname Nachname]</span></strong><br>
+    <span class="ph">[Straße Hausnr.]</span> · <span class="ph">[PLZ Ort]</span><br>
+    Tel. <span class="ph">[Telefonnummer]</span> · <span class="ph">[E-Mail-Adresse]</span>
+  </div>
+
+  <div class="addr-row">
+    <div class="recipient">
+      <div class="label">Empfänger</div>
+      Netto Marken-Discount <span class="ph">[Filiale / Markt]</span><br>
+      <span class="ph">[z. Hd. Frau/Herr Ansprechpartner:in]</span><br>
+      <span class="ph">[Straße Hausnr.]</span><br>
+      <span class="ph">[PLZ Ort]</span>
+    </div>
+    <div class="place-date"><span class="ph">[Ort]</span>, <span class="ph">[TT.MM.JJJJ]</span></div>
+  </div>
+
+  <div class="subject">Bewerbung um einen Minijob als <span class="ph">[Aushilfe / Verkäufer:in]</span> <span class="ref">– <span class="ph">[ggf. Kennziffer]</span></span></div>
+
+  <div class="letter">
+    <p class="greeting">Sehr geehrte Damen und Herren, <span class="ph">[bei bekanntem Ansprechpartner: „Sehr geehrte Frau …," bzw. „Sehr geehrter Herr …,"]</span></p>
+
+    <p>hiermit bewerbe ich mich um einen Minijob (Basis <span class="ph">[z. B. 538&nbsp;€]</span>) in Ihrer Netto-Filiale. Ihr Markt liegt <span class="ph">[z. B. „ganz in meiner Nähe" / „gut erreichbar für mich"]</span>, und ich möchte mir gerne eine verlässliche Nebenbeschäftigung mit Kundenkontakt aufbauen.</p>
+
+    <p>Aktuell bin ich <span class="ph">[aktuelle Situation, z. B. „Schüler:in an der …-Schule" / „Student:in an der …"]</span>. Ich bin freundlich im Umgang mit Kundinnen und Kunden, arbeite sorgfältig und packe im Team zuverlässig mit an – ob an der Kasse, beim Verräumen der Ware oder bei der Sauberkeit im Markt. <span class="ph">[Optional: Erfahrung aus … habe ich bereits gesammelt.]</span></p>
+
+    <p>Als Minijob kann ich Sie regelmäßig mit rund <span class="ph">[z. B. 8–10]</span> Stunden pro Woche unterstützen; auch Spät- und Wochenenddienste sind für mich kein Problem. <strong>In den Schulferien beziehungsweise vorlesungsfreien Zeiten würde ich darüber hinaus sehr gerne in Vollzeit für Sie arbeiten</strong> und in dieser Zeit entsprechend mehr Stunden übernehmen.</p>
+
+    <p>Über eine Einladung zu einem persönlichen Gespräch freue ich mich sehr. Beginnen kann ich ab dem <span class="ph">[frühestmöglicher Eintrittstermin / „sofort"]</span>.</p>
+
+    <div class="sign">
+      <div>Mit freundlichen Grüßen</div>
+      <div class="name"><span class="ph">[Vorname Nachname]</span></div>
+    </div>
+
+    <div class="enclosure">Anlage: Lebenslauf<span class="ph">[, ggf. Zeugnisse / Nachweise]</span></div>
+  </div>
+</section>
+
+</body>
+</html>
